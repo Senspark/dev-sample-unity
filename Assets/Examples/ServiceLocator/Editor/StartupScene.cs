@@ -9,7 +9,7 @@ namespace Examples.ServiceLocator.Editor
     /// Tự động chạy trên Editor:
     /// Scene `ServiceLocatorInitScene` sẽ luôn tự khởi động trước và sau đó mới load scene cần thiết.
     /// Nếu không muốn điều đó xảy ra, đặt tên scene có đuôi là `_NoInit`.
-    public class StartupScene
+    public static class StartupScene
     {
         private const string InitScenePath = "Assets/Examples/ServiceLocator/ServiceLocatorInitScene.unity";
         private const string WantedSceneKey = "ServiceLocator_WantedScenePath";
@@ -17,7 +17,9 @@ namespace Examples.ServiceLocator.Editor
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            Debug.Log("StartupScene Initialize OnLoad");
         }
 
         private static void OnPlayModeStateChanged(PlayModeStateChange state)
@@ -30,6 +32,7 @@ namespace Examples.ServiceLocator.Editor
                 if (currentScene.name.EndsWith("_NoInit"))
                 {
                     Debug.Log($"Scene '{currentScene.name}' has _NoInit suffix, skipping init scene");
+                    EditorSceneManager.playModeStartScene = null;
                     return;
                 }
 

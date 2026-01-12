@@ -36,6 +36,25 @@ namespace Examples.ServiceLocator
             }
 
             await SceneManager.LoadSceneAsync(wantedScenePath);
+
+            AutoExpandSceneHierarchy(wantedScenePath);
+        }
+
+        private static void AutoExpandSceneHierarchy(string wantedScenePath)
+        {
+#if UNITY_EDITOR
+            // Trick: Để giữ cho Scene Hierarchy được expand: select game object đầu tiên của scene đó
+            var loadedScene = SceneManager.GetSceneByPath(wantedScenePath);
+            if (loadedScene.isLoaded)
+            {
+                var rootObjects = loadedScene.GetRootGameObjects();
+                if (rootObjects.Length > 0)
+                {
+                    UnityEditor.Selection.activeGameObject = rootObjects[0];
+                    UnityEditor.EditorGUIUtility.PingObject(rootObjects[0]);
+                }
+            }
+#endif
         }
     }
 }

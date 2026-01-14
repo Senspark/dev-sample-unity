@@ -7,3 +7,11 @@ Mục đích chính:
 Test: 
 - Scene `Assets/Examples/Inheritance/Inheritance.unity`
 - Script `Assets/Examples/Inheritance/InheritanceManager.cs`
+
+Helper script cho Editor:
+
+Test về Thread:
+Scene: `Assets/Examples/Thread/Thread_NoInit.unity`
+1. Background Thread trên mobile: `Assets/Examples/Thread/ThreadScene.cs`
+2. Cancellation: `Assets/Examples/Thread/CancellationTest.cs`
+3. Networking: `Assets/Examples/Thread/NetworkThreadTest.cs`

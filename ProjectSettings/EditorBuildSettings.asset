@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Examples/Thread/Cancellation_NoInit.unity
+    guid: 683cef106527d47c393637ea4a92556e
+  - enabled: 1
     path: Assets/Examples/Thread/Thread_NoInit.unity
     guid: 72846a1e5d537485896084498c2ba2b1
   m_configObjects:

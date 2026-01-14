@@ -8,7 +8,10 @@ Test:
 - Scene `Assets/Examples/Inheritance/Inheritance.unity`
 - Script `Assets/Examples/Inheritance/InheritanceManager.cs`
 
-# Helper script cho Editor:
+# ServiceLocator AutoLoad cho Editor:
+Scene: `Assets/Examples/ServiceLocator/ServiceLocator.unity`
+Script: `Assets/Examples/ServiceLocator/ServiceLocatorTest.cs`
+Helper Script: `Assets/Examples/ServiceLocator/Editor/StartupScene.cs`
 
 # Test về Thread:
 Scene: `Assets/Examples/Thread/Thread_NoInit.unity`

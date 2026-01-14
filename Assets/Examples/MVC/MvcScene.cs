@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Examples.MVC
@@ -8,13 +9,18 @@ namespace Examples.MVC
         [SerializeField] private Camera cam;
         [SerializeField] private GameObject fishPrefab;
         [SerializeField] private float speed = 5f;
+        [SerializeField] private int fishCount = 500;
 
         private FishGameController _gameController;
 
-        private void Start()
+        private void Awake()
         {
+            Application.targetFrameRate = 60;
             _gameController = new FishGameController();
-            _gameController.Add(SpawnFish());
+            for (var i = 0; i < fishCount; i++)
+            {
+                _gameController.Add(SpawnFish());
+            }
         }
 
         private void Update()

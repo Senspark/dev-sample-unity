@@ -1,4 +1,8 @@
+using System;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Examples.MVC
 {
@@ -18,6 +22,8 @@ namespace Examples.MVC
 
         public void Update(float deltaTime)
         {
+            DoHeavyTask();
+            
             var direction = _model.TargetPosition - _model.Position;
             var distance = direction.magnitude;
 
@@ -34,6 +40,23 @@ namespace Examples.MVC
             {
                 _model.Position += moveDistance / distance * direction;
             }
+
         }
+
+        private void DoHeavyTask()
+        {
+            new CpuIntensiveBenchmarks().SortLargeArray();
+        }
+        
+        private class CpuIntensiveBenchmarks
+        {
+            private readonly int[] _largeArray = Enumerable.Range(1, 10_000).OrderBy(x => Guid.NewGuid()).ToArray();
+
+            public void SortLargeArray()
+            {
+                Array.Sort((int[])_largeArray.Clone());
+            }
+        }
+
     }
 }

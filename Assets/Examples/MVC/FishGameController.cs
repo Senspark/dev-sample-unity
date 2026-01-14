@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Examples.MVC
@@ -20,6 +21,14 @@ namespace Examples.MVC
             {
                 controller.Update(deltaTime);
             }
+            
+            /*UniTask.RunOnThreadPool(() =>
+            {
+                foreach (var controller in _controllers)
+                {
+                    controller.Update(deltaTime);
+                }
+            });*/
 
             foreach (var view in _views)
             {

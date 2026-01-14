@@ -9,9 +9,9 @@ Test:
 - Script `Assets/Examples/Inheritance/InheritanceManager.cs`
 
 # ServiceLocator AutoLoad cho Editor:
-Scene: `Assets/Examples/ServiceLocator/ServiceLocator.unity`
-Script: `Assets/Examples/ServiceLocator/ServiceLocatorTest.cs`
-Helper Script: `Assets/Examples/ServiceLocator/Editor/StartupScene.cs`
+- Scene: `Assets/Examples/ServiceLocator/ServiceLocator.unity`
+- Script: `Assets/Examples/ServiceLocator/ServiceLocatorTest.cs`
+- Helper Script: `Assets/Examples/ServiceLocator/Editor/StartupScene.cs`
 
 # Test về Thread:
 Scene: `Assets/Examples/Thread/Thread_NoInit.unity`
@@ -20,5 +20,5 @@ Scene: `Assets/Examples/Thread/Thread_NoInit.unity`
 3. Networking: `Assets/Examples/Thread/NetworkThreadTest.cs`
 
 # MVC Demo:
-Scene: `Assets/Examples/MVC/MvcScene_NoInit.unity`
-Script: `Assets/Examples/MVC/MvcScene.cs`
+- Scene: `Assets/Examples/MVC/MvcScene_NoInit.unity`
+- Script: `Assets/Examples/MVC/MvcScene.cs`

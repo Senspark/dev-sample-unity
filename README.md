@@ -8,10 +8,14 @@ Test:
 - Scene `Assets/Examples/Inheritance/Inheritance.unity`
 - Script `Assets/Examples/Inheritance/InheritanceManager.cs`
 
-Helper script cho Editor:
+# Helper script cho Editor:
 
-Test về Thread:
+# Test về Thread:
 Scene: `Assets/Examples/Thread/Thread_NoInit.unity`
 1. Background Thread trên mobile: `Assets/Examples/Thread/ThreadScene.cs`
 2. Cancellation: `Assets/Examples/Thread/CancellationTest.cs`
 3. Networking: `Assets/Examples/Thread/NetworkThreadTest.cs`
+
+# MVC Demo:
+Scene: `Assets/Examples/MVC/MvcScene_NoInit.unity`
+Script: `Assets/Examples/MVC/MvcScene.cs`

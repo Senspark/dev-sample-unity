@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Examples.ServiceLocator.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +13,11 @@ namespace Examples.ServiceLocator
         {
             var testService = new TestService();
             ServiceLocator.Provide(testService);
+
+            var scheduler = new SchedulerService();
+            scheduler.Initialize();
+            ServiceLocator.Provide(scheduler);
+            
             Debug.Log("Service Locator Initialized");
 
             await LoadWantedSceneAsync();

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Examples.ServiceLocator.Utils
@@ -14,7 +13,7 @@ namespace Examples.ServiceLocator.Utils
         private readonly List<int> _willRemoveIds = new();
 
         private bool _disposed;
-        private int _incrementalId = int.MinValue;
+        private int _incrementalId;
 
         private bool _initialized;
 
@@ -34,35 +33,70 @@ namespace Examples.ServiceLocator.Utils
             Update().Forget();
         }
 
-        public int ScheduleRepeat(Action action, TimeSpan interval, TimeSpan? delay = null)
+        public int ScheduleRepeat(Action action, TimeSpan interval)
         {
-            if (_disposed)
+            return Schedule(action, interval, new SchedulerOption
             {
-                throw new ObjectDisposedException(nameof(SchedulerService));
-            }
-
-            return Schedule(action, interval, new ScheduleOption
-            {
-                Delay = delay,
-                Repeat = true
+                Delay = TimeSpan.Zero,
+                Repeat = true,
+                UseMainThread = false
             });
         }
 
-        public int ScheduleOnce(Action action, TimeSpan delay)
+        public int ScheduleRepeat(Action action, TimeSpan interval, bool useMainThread)
         {
-            if (_disposed)
+            return Schedule(action, interval, new SchedulerOption
             {
-                throw new ObjectDisposedException(nameof(SchedulerService));
-            }
+                Delay = TimeSpan.Zero,
+                Repeat = true,
+                UseMainThread = useMainThread
+            });
+        }
 
-            return Schedule(action, delay, new ScheduleOption
+        public int ScheduleRepeat(Action action, TimeSpan interval, TimeSpan delay)
+        {
+            return Schedule(action, interval, new SchedulerOption
             {
-                Repeat = false
+                Delay = delay,
+                Repeat = true,
+                UseMainThread = false
+            });
+        }
+
+        public int ScheduleRepeat(Action action, TimeSpan interval, TimeSpan delay, bool useMainThread)
+        {
+            return Schedule(action, interval, new SchedulerOption
+            {
+                Delay = delay,
+                Repeat = true,
+                UseMainThread = useMainThread
+            });
+        }
+
+        public int ScheduleRepeat(Action action, TimeSpan interval, bool useMainThread, TimeSpan delay)
+        {
+            return Schedule(action, interval, new SchedulerOption
+            {
+                Delay = delay,
+                Repeat = true,
+                UseMainThread = useMainThread
+            });
+        }
+
+        public int ScheduleOnce(Action action, TimeSpan delay, bool useMainThread = false)
+        {
+            return Schedule(action, delay, new SchedulerOption
+            {
+                Delay = TimeSpan.Zero,
+                Repeat = false,
+                UseMainThread = useMainThread
             });
         }
 
         public void Cancel(int scheduleId)
         {
+            if (scheduleId <= 0) return;
+
             UniTask.RunOnThreadPool(() =>
             {
                 lock (_willRemoveIds)
@@ -84,8 +118,13 @@ namespace Examples.ServiceLocator.Utils
             });
         }
 
-        private int Schedule(Action action, TimeSpan interval, ScheduleOption option = null)
+        private int Schedule(Action action, TimeSpan interval, SchedulerOption option = null)
         {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(SchedulerService));
+            }
+
             var id = _incrementalId++;
             UniTask.RunOnThreadPool(() =>
             {
@@ -185,18 +224,18 @@ namespace Examples.ServiceLocator.Utils
         private DateTime _nextTime;
         private readonly Action _action;
         private readonly TimeSpan _interval;
-        [CanBeNull] private readonly ScheduleOption _option;
+        private readonly SchedulerOption _option;
 
-        public SchedulerTask(int scheduleId, Action action, TimeSpan interval, [CanBeNull] ScheduleOption option)
+        public SchedulerTask(int scheduleId, Action action, TimeSpan interval, SchedulerOption option)
         {
             ScheduleId = scheduleId;
             _action = action;
             _interval = interval;
             _option = option;
 
-            if (option is { Delay: not null })
+            if (option.Delay.Ticks > 0)
             {
-                _nextTime = DateTime.Now + option.Delay.Value;
+                _nextTime = DateTime.Now + option.Delay;
             }
             else
             {
@@ -206,12 +245,11 @@ namespace Examples.ServiceLocator.Utils
 
         public bool CanExecute(DateTime now) => !Ended && _nextTime <= now;
 
-        public UniTaskVoid Execute()
+        public async UniTaskVoid Execute()
         {
             try
             {
-                _action();
-                if (_option is { Repeat: true })
+                if (_option.Repeat)
                 {
                     _nextTime = DateTime.Now + _interval;
                 }
@@ -219,13 +257,25 @@ namespace Examples.ServiceLocator.Utils
                 {
                     Ended = true;
                 }
+
+                if (_option.UseMainThread)
+                {
+                    await UniTask.SwitchToMainThread();
+                }
+
+                _action();
             }
             catch (Exception e)
             {
                 Debug.LogException(e);
             }
-
-            return new UniTaskVoid();
         }
+    }
+
+    internal class SchedulerOption
+    {
+        public TimeSpan Delay;
+        public bool Repeat;
+        public bool UseMainThread;
     }
 }

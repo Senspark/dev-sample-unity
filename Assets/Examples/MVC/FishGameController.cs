@@ -22,6 +22,7 @@ namespace Examples.MVC
                 controller.Update(deltaTime);
             }
             
+            // Hidden: code này chỉ để demo nhanh - thực tế nên có phương án dài hạn hơn
             /*UniTask.RunOnThreadPool(() =>
             {
                 foreach (var controller in _controllers)

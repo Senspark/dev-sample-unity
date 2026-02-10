@@ -20,4 +20,7 @@ namespace Examples.ServiceLocator {
             Name = type.FullName;
         }
     }
+    
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public class InjectAttribute : Attribute { }
 }
